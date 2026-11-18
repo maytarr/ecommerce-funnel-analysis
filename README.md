@@ -26,13 +26,13 @@ Google's public [GA4 e-commerce sample](https://developers.google.com/analytics/
 
 ![Purchase rate by source](images/02_purchase_rate_by_source.png)
 
-**5. The peak was early December, not Black Friday.** The week of 7 December had the most visitors, buyers and revenue, most likely the last safe week to order before Christmas. After 21 December sales collapse, and early January is busy (24,000+ visitors a week) but only 0.66% buy.
+**5. The peak was early December, not Black Friday.** The week of 7 December had the most visitors, buyers and revenue, most likely the last safe week to order before Christmas. After 21 December sales collapse, and early January is busy (24 000+ visitors a week) but only 0.66% buy.
 
 ![Weekly trend](images/03_weekly_trend.png)
 
 ## Data quality check
 
-In the last week of January, revenue per buyer fell from about $75 to $18. A day-by-day check ([`05_revenue_tracking_check.sql`](sql/05_revenue_tracking_check.sql)) showed that purchases kept happening at the normal rate, but from **26 January** more and more were recorded with **$0 revenue**, reaching 100% on 31 January. This is a tracking problem, not a change in shopper behaviour, so revenue from 26 January onwards is excluded from conclusions. Buyer counts and purchase rates are unaffected.
+In the last week of January, revenue per buyer fell from about US$75 to US$18. A day-by-day check ([`05_revenue_tracking_check.sql`](sql/05_revenue_tracking_check.sql)) showed that purchases kept happening at the normal rate, but from **26 January** more and more were recorded with **US$0 revenue**, reaching 100% on 31 January. This is a tracking problem, not a change in shopper behaviour, so revenue from 26 January onwards is excluded from conclusions. Buyer counts and purchase rates are unaffected.
 
 ## Limitations
 

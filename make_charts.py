@@ -24,6 +24,11 @@ plt.rcParams.update({
 })
 
 
+def za(n):
+    """South African thousands separator: 267 116."""
+    return f"{n:,}".replace(",", " ")
+
+
 def title(ax, main, sub):
     ax.set_title(main, loc="left", fontsize=14, fontweight="bold", color=TEXT, pad=26)
     ax.text(0, 1.02, sub, transform=ax.transAxes, fontsize=10.5, color=TEXT2)
@@ -45,7 +50,7 @@ ax.spines["bottom"].set_visible(False)
 ax.spines["left"].set_visible(False)
 prev = None
 for yi, (u, s) in zip(y, zip(f["users"], f["step"])):
-    note = f"{u:,}" if prev is None else f"{u:,}   ({u / prev:.0%} of previous step)"
+    note = za(u) if prev is None else f"{za(u)}   ({u / prev:.0%} of previous step)"
     ax.text(u + 3000, yi, note, va="center", fontsize=10, color=TEXT)
     prev = u
 ax.set_xlim(0, f["users"].max() * 1.45)
@@ -73,7 +78,7 @@ ax.set_xticks([])
 ax.spines["bottom"].set_visible(False)
 ax.spines["left"].set_visible(False)
 for yi, r, n in zip(y, t["rate"], t["visited"]):
-    ax.text(r * 100 + 0.05, yi, f"{r:.2%}   ({n:,} visitors)", va="center", fontsize=10)
+    ax.text(r * 100 + 0.05, yi, f"{r:.2%}   ({za(n)} visitors)", va="center", fontsize=10)
 ax.set_xlim(0, t["rate"].max() * 100 * 1.6)
 title(ax, "Paid-ad visitors buy about half as often as referred visitors",
       "Share of visitors who bought, by how they first arrived (grey = anonymised by Google)")
@@ -105,10 +110,10 @@ title(a1, "Buying peaked in early December, not on Black Friday",
 ok = w["week_start"] < "2021-01-25"
 a2.bar(w.loc[ok, "week_start"], w.loc[ok, "revenue_usd"] / 1000, width=5, color=BLUE)
 a2.bar(w.loc[~ok, "week_start"], w.loc[~ok, "revenue_usd"] / 1000, width=5, color=GREY)
-a2.annotate("Revenue tracking gap:\nmost purchases logged as $0", (pd.Timestamp("2021-01-25"), 7),
+a2.annotate("Revenue tracking gap:\nmost purchases recorded as US$0", (pd.Timestamp("2021-01-25"), 7),
             xytext=(pd.Timestamp("2021-01-28"), 42), ha="right", fontsize=9, color=TEXT2,
             arrowprops=dict(arrowstyle="-", color=TEXT2, lw=0.8))
-a2.set_ylabel("Revenue (USD thousands)")
+a2.set_ylabel("Revenue (US$ thousands)")
 a2.grid(axis="y", color=GRID, lw=0.8)
 a2.set_axisbelow(True)
 a2.tick_params(axis="x", labelsize=9.5)
