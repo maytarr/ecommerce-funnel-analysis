@@ -18,21 +18,21 @@ Google's public [GA4 e-commerce sample](https://developers.google.com/analytics/
 
 **1. Most shoppers are lost before the cart, not at checkout.** 77% of visitors never view a product, and 80% of product viewers never add anything to their cart. Once someone adds to cart, 77% start checkout. Overall, **1.65% of visitors bought something**.
 
-**2. One leak inside checkout.** 41% of people who start checkout leave before entering payment details. That step is where shipping costs and delivery details usually appear, which makes it the first candidate for an A/B test.
+**2. The biggest drop inside checkout is at the payment step.** 41% of people who start checkout leave before entering payment details. The data does not say why; shipping costs or other unexpected charges often first appear at this step, which makes it a good candidate for an A/B test.
 
-**3. Device makes no clear difference.** Mobile converted at 1.71% and desktop at 1.62%. A two-proportion z-test gives p = 0.056, just above the usual 0.05 threshold, so the honest conclusion is "no clear difference" ([`significance_check.py`](significance_check.py)).
+**3. Device makes no clear difference.** Mobile converted at 1.71% and desktop at 1.62%. A two-proportion z-test gives p = 0.056, just above the usual 0.05 threshold, so the difference is not statistically significant ([`significance_check.py`](significance_check.py)).
 
-**4. Paid-ad visitors buy about half as often as referred visitors** (0.98% vs 1.89%). The dataset has no ad spend, so this can't say whether the ads pay for themselves; joining ad-platform cost data would be the next step.
+**4. Paid-ad visitors buy about half as often as referred visitors** (0.98% vs 1.89%). The dataset has no ad spend, so this cannot show whether the ads pay for themselves. Joining advertising cost data would be the next step.
 
 ![Purchase rate by source](images/02_purchase_rate_by_source.png)
 
-**5. The peak was early December, not Black Friday.** The week of 7 December had the most visitors, buyers and revenue, most likely the last safe week to order before Christmas. After 21 December sales collapse, and early January is busy (24 000+ visitors a week) but only 0.66% buy.
+**5. The peak was early December, not Black Friday.** The week of 7 December had the most visitors, buyers and revenue, possibly the last week to order in time for Christmas. After 21 December sales collapse, and early January is busy (24 000+ visitors a week) but only 0.66% buy.
 
 ![Weekly trend](images/03_weekly_trend.png)
 
 ## Data quality check
 
-In the last week of January, revenue per buyer fell from about US$75 to US$18. A day-by-day check ([`05_revenue_tracking_check.sql`](sql/05_revenue_tracking_check.sql)) showed that purchases kept happening at the normal rate, but from **26 January** more and more were recorded with **US$0 revenue**, reaching 100% on 31 January. This is a tracking problem, not a change in shopper behaviour, so revenue from 26 January onwards is excluded from conclusions. Buyer counts and purchase rates are unaffected.
+In the last week of January, revenue per buyer fell from about US$75 to US$18. A day-by-day check ([`05_revenue_tracking_check.sql`](sql/05_revenue_tracking_check.sql)) showed that purchases kept happening at the normal rate, but from **26 January** more and more were recorded with **US$0 revenue**, reaching 100% on 31 January. This is a tracking problem, not a change in shopper behaviour, so revenue from 26 to 31 January is excluded from conclusions (shown in grey in the weekly chart). Buyer counts and purchase rates are unaffected and kept.
 
 ## Limitations
 
@@ -42,7 +42,7 @@ In the last week of January, revenue per buyer fell from about US$75 to US$18. A
 
 ## Repository
 
-| Folder / file | What's in it |
+| Folder / file | Contents |
 |---|---|
 | [`sql/`](sql/) | The five BigQuery queries, numbered in the order they were run |
 | [`results/`](results/) | Each query's output as CSV |
