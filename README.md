@@ -34,6 +34,26 @@ Google's public [GA4 e-commerce sample](https://developers.google.com/analytics/
 
 In the last week of January, revenue per buyer fell from about US$75 to US$18. A day-by-day check ([`05_revenue_tracking_check.sql`](sql/05_revenue_tracking_check.sql)) showed that purchases kept happening at the normal rate, but from **26 January** more and more were recorded with **US$0 revenue**, reaching 100% on 31 January. This is a tracking problem, not a change in shopper behaviour, so revenue from 26 to 31 January is excluded from conclusions (shown in grey in the weekly chart). Buyer counts and purchase rates are unaffected and kept.
 
+## Next steps in detail
+
+**1. Sequential funnel.** The current funnel counts each step independently. A stricter version would group events by visitor and visit (`user_pseudo_id` plus the `ga_session_id` event parameter), take the earliest timestamp of each step, and only count a step if the previous step's timestamp is earlier in the same visit. This gives truer step-to-step drop-off and the time taken between steps.
+
+**2. Cost per purchase and return on ad spend.** With ad-platform cost data joined by date and campaign:
+
+- *Cost per acquisition* = ad spend / purchases from ad visitors. Example: 15 000 clicks at US$0.50 = US$7 500; 150 purchases → US$50 per purchase.
+- *Return on ad spend* = revenue from ad visitors / ad spend. Example: 150 purchases × US$75 = US$11 250 → US$1.50 back per US$1 spent. At US$2 a click, the same clicks cost US$30 000 → about US$0.38 back per US$1.
+
+These figures are illustrative; the dataset has no ad spend. Whether a return is good enough also depends on profit margins.
+
+**3. A/B test: showing shipping costs earlier.**
+
+- **Version A (control):** shipping costs appear at the payment step. **Version B:** shipping costs shown on the cart page.
+- **Random assignment:** checkout visitors randomly split between A and B, run at the same time.
+- **Primary metric:** checkout-to-purchase rate (currently about 45%).
+- **Sample size, fixed in advance:** detecting an increase from 45% to 48% (5% significance, 80% power) needs about 4 300 checkout visitors per version, roughly three months at this shop's traffic. No stopping early because one version looks ahead.
+- **Decision:** two-proportion z-test at the planned sample size; B wins only if higher with p < 0.05.
+- **Guardrail metric:** overall visitor-to-purchase rate, in case showing shipping earlier puts people off adding to cart.
+
 ## Limitations
 
 - **Funnel steps are counted independently.** Each step counts everyone who did it at any point in the three months, not people moving through the steps in strict order.
@@ -56,4 +76,8 @@ In the last week of January, revenue per buyer fell from about US$75 to US$18. A
 2. Run the queries in `sql/` in order. The dataset is public, so nothing needs to be uploaded.
 3. Rebuild the charts: `pip install pandas matplotlib`, then `python make_charts.py`.
 
-**Tools:** SQL (BigQuery), Python (pandas, matplotlib), GA4 event data.
+## Tools and techniques
+
+- **SQL in Google BigQuery:** data extraction and all analysis: funnel counts, segmentation by device, traffic source and week, and the day-by-day revenue check.
+- **Python (pandas, matplotlib):** the two-proportion z-test and the charts.
+- **Techniques:** funnel and conversion rate analysis, segmentation, trend analysis, significance testing, data quality checks.
