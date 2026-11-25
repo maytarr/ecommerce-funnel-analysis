@@ -20,7 +20,7 @@ Google's public [GA4 e-commerce sample](https://developers.google.com/analytics/
 
 **2. The biggest drop inside checkout is at the payment step.** 41% of people who start checkout leave before entering payment details. The data does not say why; shipping costs or other unexpected charges often first appear at this step, which makes it a good candidate for an A/B test.
 
-**3. Device makes no clear difference.** Mobile converted at 1.71% and desktop at 1.62%. A two-proportion z-test gives p = 0.056, just above the usual 0.05 threshold, so the difference is not statistically significant ([`significance_check.py`](significance_check.py)).
+**3. Device makes no clear difference.** 4 168 visitors used both a phone and a computer, which would put them in both groups and break the independence assumption of a two-proportion z-test. Comparing single-device visitors only, mobile converted at 1.43% and desktop at 1.42% (z = 0.23, p = 0.82): not significant. The first, overlapping comparison (1.71% vs 1.62%, p = 0.056) was driven by multi-device visitors, 16% of whom bought ([`significance_check.py`](significance_check.py), [`06_single_device_visitors.sql`](sql/06_single_device_visitors.sql)).
 
 **4. Paid-ad visitors buy about half as often as referred visitors** (0.98% vs 1.89%). The dataset has no ad spend, so this cannot show whether the ads pay for themselves. Joining advertising cost data would be the next step.
 
@@ -64,7 +64,7 @@ These figures are illustrative; the dataset has no ad spend. Whether a return is
 
 | Folder / file | Contents |
 |---|---|
-| [`sql/`](sql/) | The five BigQuery queries, numbered in the order they were run |
+| [`sql/`](sql/) | The six BigQuery queries, numbered in the order they were run |
 | [`results/`](results/) | Each query's output as CSV |
 | [`images/`](images/) | Charts |
 | [`make_charts.py`](make_charts.py) | Builds the charts from `results/` |
